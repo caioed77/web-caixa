@@ -23,8 +23,8 @@
                     </div>
                 </div>
                 <div
-                    class="flex flex-col gap-3 mt-10 bg-zinc-100 p-5 rounded-md">
-                    <label for="valor">Informe o valor</label>
+                    class="flex flex-col gap-3 mt-10 bg-zinc-100 border border-zinc-300 p-5 rounded-md">
+                    <label for="valor" class="font-bold text-sm">VALOR DA TRANSAÇÃO</label>
                     <div class="w-1/2">
                         <input
                             type="text"
@@ -33,7 +33,7 @@
                             v-model="valor"
                             required />
                     </div>
-                    <label for="tipo">Tipo</label>
+                    <label for="tipo" class="font-bold text-sm">TIPO</label>
                     <div class="w-1/2">
                         <select
                             class="bg-white w-full text-main border border-gray-300 rounded-lg p-3 focus:outline-none"
