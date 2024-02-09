@@ -1,13 +1,11 @@
 package com.apiCaixaFinanceiro.apicaixa.services;
 
-import com.apiCaixaFinanceiro.apicaixa.Entities.CaixaEntity;
 import com.apiCaixaFinanceiro.apicaixa.Entities.TransacoesEntity;
 import com.apiCaixaFinanceiro.apicaixa.repositories.CaixaRepository;
 import com.apiCaixaFinanceiro.apicaixa.repositories.TransacoesRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +38,7 @@ public class TransacoesService {
             saldoCaixa.setSaldo(newSaldo);
             caixaRepository.save(saldoCaixa);
         }
+        transacoesRepository.save(transacoesEntity);
     }
 
     public List<TransacoesEntity> retornaTransacao() {

@@ -1,14 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&family=Ubuntu:wght@300&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html,
 body {
-  font-family: 'Ubuntu', sans-serif;
-  background-color: azure;
+  font-family: 'Ubuntu', sans-serif;  
 }
 
 #app {
   font-family: 'Ubuntu', sans-serif;
+}
+
+@layer components {
+  .pagina {
+    @apply pl-4 pr-4 pt-4 md:px-4 xl:px-16 h-screen xl:h-auto mx-auto lg:max-w-7xl bg-white;
+  }
+
+  .legenda {
+    @apply font-bold pb-2;
+  }
+
+  .barra-titulo {
+    @apply flex gap-3 items-center text-lg p-2 font-bold text-main;
+  }
+
+  .selecao-ComboBox {
+    @apply bg-slate-200 text-main border border-gray-300 rounded-lg p-2 w-full font-semibold focus:outline-none;
+  }
 }

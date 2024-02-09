@@ -1,10 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import App from '../App.vue';
+import Caixa from "../views/Caixa.vue";
 
 const routes = [
   {
     path: "/",
-    component: App,
+    component: Caixa,
   } 
 ];
 
