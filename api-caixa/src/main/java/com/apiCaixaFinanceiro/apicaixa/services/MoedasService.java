@@ -1,6 +1,6 @@
 package com.apiCaixaFinanceiro.apicaixa.services;
 
-import com.apiCaixaFinanceiro.apicaixa.Entities.MoedasEntity;
+import com.apiCaixaFinanceiro.apicaixa.entities.MoedasEntity;
 import com.apiCaixaFinanceiro.apicaixa.repositories.MoedasRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

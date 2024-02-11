@@ -1,6 +1,8 @@
 package com.apiCaixaFinanceiro.apicaixa.services;
 
-import com.apiCaixaFinanceiro.apicaixa.Entities.TransacoesEntity;
+import com.apiCaixaFinanceiro.apicaixa.entities.TransacoesEntity;
+import com.apiCaixaFinanceiro.apicaixa.exceptions.BadRequestException;
+import com.apiCaixaFinanceiro.apicaixa.exceptions.ResouceNotFoundException;
 import com.apiCaixaFinanceiro.apicaixa.repositories.CaixaRepository;
 import com.apiCaixaFinanceiro.apicaixa.repositories.TransacoesRepository;
 import jakarta.transaction.Transactional;
@@ -26,7 +28,7 @@ public class TransacoesService {
         if (transacoesEntity.getTipoTransacao().equals("S")) {
 
             if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
-                throw new RuntimeException("Você não possui saldo para essa transação");
+                throw new BadRequestException("Você não possui saldo para essa transação");
             }
 
             var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
@@ -51,7 +53,7 @@ public class TransacoesService {
             return transacoes.get();
         }
         else {
-            throw new RuntimeException("Transação não encontrada para o id"+ id);
+            throw new ResouceNotFoundException(id);
         }
     }
 

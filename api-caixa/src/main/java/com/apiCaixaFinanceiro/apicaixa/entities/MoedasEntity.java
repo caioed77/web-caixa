@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.Entities;
+package com.apiCaixaFinanceiro.apicaixa.entities;
 
 
 import jakarta.persistence.*;
