@@ -1,34 +1,21 @@
 <template>
-  <header class="h-screen">
+  <header class="">
     <div class="flex justify-center w-full">
       <img
         src="../assets/FANS.png"
         class="h-32 w-50 object-center object-contain"
       />
     </div>
-    <div class="flex w-2/5 justify-between mx-auto mb-5">
-      <div
-        class="flex flex-col px-6 py-3 shadow-xl text-xl border border-zinc-300 text-white bg-red-800 rounded-lg"
-      >
-        <h2 class="font-bold">Saldo Caixa</h2>
-        <p class="text-center">R$ {{ saldoDisplay }}</p>
-      </div>
-      <div
-        class="flex flex-col px-5 py-3 shadow-xl text-xl border border-zinc-300 text-white bg-red-800 rounded-xl"
-      >
-        <h2 class="text-center font-bold">Saldo Estoque</h2>
-        <p class="text-center">R$ {{ 20 }}</p>
-      </div>
-      <div
-        class="flex flex-col px-5 py-3 shadow-xl text-xl border border-zinc-300 text-white bg-red-800 rounded-xl"
-      >
-        <h2 class="text-center font-bold">Data</h2>
-        <p class="text-center ">{{ "12/02/2024" }}</p>
-      </div>
+    <div class="flex w-1/2 gap-10 justify-between mx-auto mb-5">
+      <AppCards
+        :valor-caixa="saldoDisplay"
+        :valor-carteira="'20'"
+        :data="'20/02/2024'"
+      />
     </div>
 
     <div
-      class="pagina bg-zinc-200 border border-zinc-300 h-full mx-auto rounded-t-xl"
+      class="pagina bg-zinc-200 border border-zinc-300 mx-auto rounded-xl mb-10"
     >
       <div
         class="flex text-main justify-start text-2xl font-bold mx-auto max-w-7xl"
@@ -96,7 +83,7 @@
           </div>
         </div>
         <div
-          class="flex flex-col w-full gap-3 mt-10 bg-zinc-100 border border-zinc-300 p-5 rounded-md"
+          class="flex flex-col w-full gap-3 mt-10 mb-10 bg-zinc-100 border border-zinc-300 p-5 rounded-md"
         >
           <label for="valor" class="font-bold text-sm">QUANTIDADE MOEDAS</label>
           <div class="w-1/2">
@@ -138,6 +125,7 @@ import {
 import { ITransacoes } from "../types/TransacoesType";
 import { ICaixa } from "../types/CaixaType";
 import { buscarSaldos } from "../services/CaixaService";
+import AppCards from "../components/AppCards.vue";
 
 const dadosTransacaoGravar = reactive<ITransacoes>({
   dataTransacao: "",
