@@ -1,32 +1,16 @@
 import { ITransacoes } from "../types/TransacoesType";
 import { api } from "./ApiService";
-import { useErroStore } from "../store/errorStore";
-import { AxiosError } from "axios";
+import { IPaginacao } from "../types/Paginacao";
 
 export async function onGravarTransacao(dados: ITransacoes) {
-  const errorStore = useErroStore();
-  try {
-    await api.post<ITransacoes>("/transacoes/gravar", dados);
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      errorStore.addErro(error.response?.data.title);
-    }
-  }
+  await api.post<ITransacoes>("/transacoes/gravar", dados);
 }
 
-export async function onRetornarTransacoes(): Promise<
-  ITransacoes[] | undefined
-> {
-  const errorStore = useErroStore();
-  try {
-    const response = await api.get<ITransacoes[]>(
-      "/transacoes/retornarTransacoes"
-    );
-    return response.data;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      errorStore.addErro(error.response?.data.title);
-    }
-    return undefined;
-  }
+export async function onRetornarTransacoes(
+  pagina: number
+): Promise<IPaginacao<ITransacoes>> {
+  const response = await api.get<IPaginacao<ITransacoes>>(
+    `/transacoes/retornarTransacoes?page=${pagina}&size=9`
+  );
+  return response.data;
 }

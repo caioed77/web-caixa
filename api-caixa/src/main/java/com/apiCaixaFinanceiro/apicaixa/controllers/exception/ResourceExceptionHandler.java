@@ -14,7 +14,7 @@ public class ResourceExceptionHandler {
       @ExceptionHandler(BadRequestException.class)
       public ResponseEntity<StandardError> objectNotFound(BadRequestException e, HttpServletRequest request) {
             HttpStatus status = HttpStatus.BAD_REQUEST;
-            StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Recurso Já Existe", e.getMessage(), request.getRequestURI());
+            StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "ELS - ", e.getMessage(), request.getRequestURI());
 
             return ResponseEntity.status(status).body(err);
       }
@@ -23,7 +23,7 @@ public class ResourceExceptionHandler {
       @ExceptionHandler(ResouceNotFoundException.class)
       public ResponseEntity<StandardError> resourceAlreadyExists(ResouceNotFoundException e, HttpServletRequest request) {
             HttpStatus status = HttpStatus.NOT_FOUND;
-            StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Não Encontrado", e.getMessage(), request.getRequestURI());
+            StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "NET -", e.getMessage(), request.getRequestURI());
 
             return ResponseEntity.status(status).body(err);
 

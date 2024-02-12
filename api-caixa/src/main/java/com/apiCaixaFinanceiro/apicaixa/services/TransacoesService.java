@@ -6,6 +6,8 @@ import com.apiCaixaFinanceiro.apicaixa.exceptions.ResouceNotFoundException;
 import com.apiCaixaFinanceiro.apicaixa.repositories.CaixaRepository;
 import com.apiCaixaFinanceiro.apicaixa.repositories.TransacoesRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,8 +45,8 @@ public class TransacoesService {
         transacoesRepository.save(transacoesEntity);
     }
 
-    public List<TransacoesEntity> retornaTransacao() {
-       return transacoesRepository.findAll();
+    public Page<TransacoesEntity> retornaTransacao(Pageable pageable) {
+       return transacoesRepository.findAll(pageable);
     }
 
     public TransacoesEntity retornarTransacoesPorId(Long id){
