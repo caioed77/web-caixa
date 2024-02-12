@@ -1,8 +1,10 @@
 <template>
-  
   <header class="">
     <div class="flex justify-center w-full">
-      <img src="../assets/FANS.png" class="h-32 w-50 object-center object-contain" />
+      <img
+        src="../assets/FANS.png"
+        class="h-32 w-50 object-center object-contain"
+      />
     </div>
     <div class="flex w-1/2 gap-10 justify-between mx-auto mb-5">
       <AppCards
@@ -61,12 +63,15 @@
             class="w-full mt-10 bg-zinc-100 border border-zinc-300 p-5 rounded-md"
           >
             <div class="flex w-full">
-              <button
-                @click="onRetornaPagina(dadosTransacao!.number)"
-                class="hover:text-red-800"
-              >
-                <PhCaretLeft :size="30" />
-              </button>
+              <AppPaginacao
+                :orientacao-botton="true"
+                :pagina="dadosTransacao?.number ?? 0"
+                :ultima-pagina="dadosTransacao?.last ?? false"
+                :primeira-pagina="dadosTransacao?.first ?? false"
+                :total-paginas="dadosTransacao?.totalPages ?? 0"
+                :total-registros="dadosTransacao?.totalElements ?? 0"
+                @on-click-back="onPaginaMudou"
+              />
               <div class="w-full px-3">
                 <div class="grid grid-cols-3">
                   <div class="font-bold">Tipo</div>
@@ -79,17 +84,22 @@
                   class="grid grid-cols-3 gap-y-3"
                   :key="index"
                 >
-                  <div>{{ onFormatarTipoTransacao(item.tipoTransacao) }}</div>
-                  <div>{{ item.valorTransacao.toFixed(2) }}</div>
-                  <div>{{ onFormatarData(item.dataTransacao) }}</div>
+                  <div>
+                    {{ onFormatarTipoTransacao(item?.tipoTransacao ?? "") }}
+                  </div>
+                  <div>{{ item?.valorTransacao.toFixed(2) }}</div>
+                  <div>{{ onFormatarData(item?.dataTransacao ?? "") }}</div>
                 </div>
               </div>
-              <button
-                @click="onAvancaoPagina(dadosTransacao!.number)"
-                class="hover:text-red-800"
-              >
-                <PhCaretRight :size="30" />
-              </button>
+              <AppPaginacao
+                :orientacao-botton="false"
+                :pagina="dadosTransacao?.number ?? 0"
+                :ultima-pagina="dadosTransacao?.last ?? false"
+                :primeira-pagina="dadosTransacao?.first ?? false"
+                :total-paginas="dadosTransacao?.totalPages ?? 0"
+                :total-registros="dadosTransacao?.totalElements ?? 0"
+                @on-click-next="onPaginaMudou"
+              />
             </div>
           </div>
         </div>
@@ -128,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, onUpdated } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import {
   onGravarTransacao,
   onRetornarTransacoes,
@@ -139,7 +149,7 @@ import { buscarSaldos } from "../services/CaixaService";
 import { IPaginacao } from "../types/Paginacao";
 import AppCards from "../components/AppCards.vue";
 import moment from "moment";
-import { PhCaretLeft, PhCaretRight } from "@phosphor-icons/vue";
+import AppPaginacao from "../components/AppPaginacao.vue";
 
 const dadosTransacaoGravar = reactive<ITransacoes>({
   dataTransacao: "",
@@ -147,7 +157,7 @@ const dadosTransacaoGravar = reactive<ITransacoes>({
   valorTransacao: 0,
 });
 
-const dadosTransacao = ref<IPaginacao<ITransacoes>>();
+const dadosTransacao = ref<IPaginacao<ITransacoes | undefined>>();
 const dadosSaldo = ref<ICaixa>();
 const saldoDisplay = ref(0);
 
@@ -168,7 +178,15 @@ async function onRealizarTransacao() {
 }
 
 async function onDadosTransacao(pagina: number) {
-  dadosTransacao.value = await onRetornarTransacoes(pagina);
+  const dados = await onRetornarTransacoes(pagina);
+
+  if (dados !== undefined && "number" in dados) {
+    dadosTransacao.value = dados;
+  }
+}
+
+function onPaginaMudou(novaPagina: number) {
+  onDadosTransacao(novaPagina);
 }
 
 async function onRetonarSaldoCaixa(id: number) {
@@ -196,27 +214,6 @@ function onFormatarData(data: string) {
 
   return dataMoment.format("DD/MM/YYYY");
 }
-
-async function onAvancaoPagina(pagina: number) {  
-  pagina += pagina + 1; 
- 
-  await onDadosTransacao(pagina);
-}
-
-async function onRetornaPagina(pagina: number) {
-  pagina -= pagina - 1;
-  
-  if(pagina < 0) {
-    await onRetornarTransacoes(0);
-  } else {
-    await onRetornarTransacoes(pagina);
-  }
-  
-}
-
-onUpdated(() => {
-  onRetonarSaldoCaixa(1);
-});
 
 onMounted(() => {
   onDadosTransacao(0);

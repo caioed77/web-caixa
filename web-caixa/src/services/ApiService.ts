@@ -21,8 +21,8 @@ api.interceptors.request.use(
         const erroStore = useErroStore();
         if (axios.isAxiosError(error)) {
             erroStore.addErro(
-                error.response?.data.title,
-                error.response?.data.detail
+                error.response?.data.erro,
+                error.response?.data.message
             );
         } else {
             erroStore.addErro(error);
@@ -48,8 +48,8 @@ api.interceptors.response.use(
         } else if (axios.isAxiosError(error)) {
             if (error.response !== undefined) {
                 erroStore.addErro(
-                    error.response.data.title,
-                    error.response?.data.detail
+                    error.response?.data.erro,
+                    error.response?.data.message
                 );
             } else {
                 erroStore.addErro(error.message);

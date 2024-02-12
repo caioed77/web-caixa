@@ -1,6 +1,10 @@
 <template>
   <TransitionRoot as="template" :show="exibir">
-    <Dialog as="div" class="relative z-10" @close="closeModal">
+    <Dialog
+      as="div"
+      class="relative z-10"
+      @close="erroStore.stateErro.exibir = false"
+    >
       <TransitionChild
         as="template"
         enter="ease-out duration-300"
@@ -12,7 +16,7 @@
       >
         <div
           class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-        />
+        ></div>
       </TransitionChild>
 
       <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -82,17 +86,13 @@
 import { storeToRefs } from "pinia";
 import { useErroStore } from "../store/errorStore";
 import { computed } from "vue";
+import { PhWarningCircle } from "@phosphor-icons/vue";
 
 const erroStore = useErroStore();
 const { stateErro } = storeToRefs(erroStore);
 const exibir = computed(() => stateErro.value.mensagemErro !== "");
 
 function onCofirmar() {
-  erroStore.stateErro.exibir = false;
-  erroStore.addErro("");
-}
-
-function closeModal() {
   erroStore.stateErro.exibir = false;
   erroStore.addErro("");
 }
