@@ -71,6 +71,7 @@
                 <div class="font-bold">Descrição</div>
                 <div class="font-bold">Quantidade</div>
               </div>
+              <AppModalAlteracao :abre-modal="exibirModal" @on-close="onCloseModal"/>
 
               <div v-for="(item, index) in dadosMoedas" class="grid grid-cols-3 gap-y-3" :key="index">
                 <div>
@@ -78,7 +79,7 @@
                 </div>
                 <div>{{ item.quantidade.toFixed(1) }}</div>
                 <div class="flex w-full justify-end">
-                  <button class="border px-5 bg-red-800 text-white">
+                  <button class="border px-5 bg-red-800 text-white" @click="onAlterarQuantidadeMoeda">
                     <PhSwap :size="24"/>
                   </button>
                 </div>
@@ -107,6 +108,7 @@ import AppPaginacao from "../components/AppPaginacao.vue";
 import { IMoedas } from "../types/MoedaType";
 import { retornaMoedas } from '../services/MoedaService'
 import { PhSwap } from "@phosphor-icons/vue";
+import AppModalAlteracao from "../components/AppModalAlteracao.vue";
 
 const dadosTransacaoGravar = reactive<ITransacoes>({
   dataTransacao: "",
@@ -118,6 +120,7 @@ const dadosTransacao = ref<IPaginacao<ITransacoes | undefined>>();
 const dadosMoedas = ref<IMoedas[]>([])
 const dadosSaldo = ref<ICaixa>();
 const saldoDisplay = ref(0);
+const exibirModal = ref(false)
 
 async function onRealizarTransacao() {
   const data = new Date();
@@ -167,6 +170,10 @@ function onFormatarTipoTransacao(nome: string) {
   }
 }
 
+function onCloseModal() {
+  exibirModal.value = false
+}
+
 function onFormatarData(data: string) {
   var dataMoment = moment(data);
 
@@ -175,6 +182,10 @@ function onFormatarData(data: string) {
   }
 
   return dataMoment.format("DD/MM/YYYY");
+}
+
+function onAlterarQuantidadeMoeda() {
+  exibirModal.value = true;
 }
 
 onMounted(() => {
