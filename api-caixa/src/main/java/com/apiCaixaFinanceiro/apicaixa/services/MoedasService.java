@@ -5,6 +5,7 @@ import com.apiCaixaFinanceiro.apicaixa.repositories.MoedasRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,8 +27,15 @@ public class MoedasService {
 
         if (moeda.isPresent()){
             var newQuantidade = moeda.get().getQuantidade() + qte;
+            moeda.get().setQuantidade(newQuantidade);
             moedasRepository.save(moeda.get());
         }
     }
+
+    public List<MoedasEntity> listarMoedas() {
+        return moedasRepository.findAll();
+    }
+
+
 
 }

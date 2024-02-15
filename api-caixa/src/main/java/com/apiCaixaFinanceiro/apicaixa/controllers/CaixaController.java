@@ -16,7 +16,6 @@ public class CaixaController {
 
       private final CaixaService caixaService;
 
-
       public CaixaController(CaixaService caixaService) {
             this.caixaService = caixaService;
       }

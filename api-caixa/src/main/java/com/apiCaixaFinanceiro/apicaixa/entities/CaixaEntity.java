@@ -17,8 +17,10 @@ public class CaixaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_CAIXA")
     private Long id;
 
+    @Column(name = "SALDO")
     private BigDecimal saldo = BigDecimal.ZERO;
 
 }

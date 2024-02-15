@@ -15,9 +15,12 @@ public class MoedasEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_MOEDA")
     private Long id;
 
+    @Column(name = "DESCRICAO")
     private String descricao;
 
+    @Column(name = "QUANTIDADE")
     private Integer quantidade;
 }
