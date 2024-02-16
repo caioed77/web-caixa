@@ -3,7 +3,7 @@
     <div class="flex justify-center w-full">
       <img src="../assets/FANS.png" class="h-32 object-center object-contain" />
     </div>
-    <div class="flex px-10 gap-10 justify-between mx-auto mb-1">
+    <div class="flex px-10 w-1/2 gap-10 justify-between mx-auto mb-1">
       <AppCards :valor-caixa="saldoDisplay" :valor-carteira="saldoEstoqueDisplay" :data="dataAtual" />
     </div>
 

@@ -8,6 +8,7 @@ import com.apiCaixaFinanceiro.apicaixa.repositories.TransacoesRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +16,8 @@ import java.util.Optional;
 
 @Service
 public class TransacoesService {
-
     private final CaixaRepository caixaRepository;
     private final TransacoesRepository transacoesRepository;
-
     public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository) {
         this.caixaRepository = caixaRepository;
         this.transacoesRepository = transacoesRepository;
@@ -27,20 +26,35 @@ public class TransacoesService {
     @Transactional
     public void gravarTransacao(TransacoesEntity transacoesEntity) {
         var saldoCaixa = caixaRepository.findById(1L).get();
-        if (transacoesEntity.getTipoTransacao().equals("S")) {
 
-            if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
-                throw new BadRequestException("Você não possui saldo para essa transação");
+        switch(transacoesEntity.getTipoTransacao()) {
+            case "S": {
+                if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
+                    throw new BadRequestException("Você não possui saldo para essa transação");
+                }
+
+                var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldo(newSaldo);
+                caixaRepository.save(saldoCaixa);
+                break;
             }
+            case "E": {
+                var newSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldo(newSaldo);
+                caixaRepository.save(saldoCaixa);
+                break;
+            }
+            case "T": {
+                var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldo(newSaldo);
 
-            var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
-            saldoCaixa.setSaldo(newSaldo);
-            caixaRepository.save(saldoCaixa);
-        } else {
-
-            var newSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
-            saldoCaixa.setSaldo(newSaldo);
-            caixaRepository.save(saldoCaixa);
+                var newSaldoEstoque = saldoCaixa.getSaldoEstoque().add(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldoEstoque(newSaldoEstoque);
+                 caixaRepository.save(saldoCaixa);
+            }
+            default: {
+                break;
+            }
         }
         transacoesRepository.save(transacoesEntity);
     }
