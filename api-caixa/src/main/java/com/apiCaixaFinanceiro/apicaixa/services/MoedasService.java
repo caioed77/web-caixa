@@ -1,6 +1,8 @@
 package com.apiCaixaFinanceiro.apicaixa.services;
 
 import com.apiCaixaFinanceiro.apicaixa.entities.MoedasEntity;
+import com.apiCaixaFinanceiro.apicaixa.exceptions.BadRequestException;
+import com.apiCaixaFinanceiro.apicaixa.exceptions.ResouceNotFoundException;
 import com.apiCaixaFinanceiro.apicaixa.repositories.MoedasRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,7 @@ public class MoedasService {
         var moeda = Optional.of(moedasRepository.findById(id)).get();
 
         if (moeda.isPresent()){
-            var newQuantidade = moeda.get().getQuantidade() + qte;
-            moeda.get().setQuantidade(newQuantidade);
+            moeda.get().setQuantidade(qte);
             moedasRepository.save(moeda.get());
         }
     }
@@ -36,6 +37,8 @@ public class MoedasService {
         return moedasRepository.findAll();
     }
 
-
+    public Optional<MoedasEntity> retonarMoedaId(Long id){
+        return Optional.ofNullable(moedasRepository.findById(id).orElseThrow(() -> new BadRequestException("Não foi encontrado dados com esse id")));
+    }
 
 }

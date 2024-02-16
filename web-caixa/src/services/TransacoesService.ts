@@ -10,7 +10,7 @@ export async function onRetornarTransacoes(
   pagina: number
 ): Promise<IPaginacao<ITransacoes>> {
   const response = await api.get<IPaginacao<ITransacoes>>(
-    `/transacoes/retornarTransacoes?page=${pagina}&size=9`
+    `/transacoes/retornarTransacoes?page=${pagina}&size=7`
   );
   return response.data;
 }

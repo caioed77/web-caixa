@@ -23,4 +23,6 @@ public class CaixaEntity {
     @Column(name = "SALDO")
     private BigDecimal saldo = BigDecimal.ZERO;
 
+    @Column(name = "SALDO_ESTOQUE")
+    private BigDecimal saldoEstoque = BigDecimal.ZERO;
 }

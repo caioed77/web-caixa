@@ -10,3 +10,8 @@ export async function retornaMoedas(): Promise<IMoedas[]> {
 export async function alterarQuantidade(id: number, quantidade: number) {
     await api.put<IMoedas>(`/moedas/alterarQuantidade/${id}?quantidade=${quantidade}`)
 }
+
+export async function buscarMoedaPorID(id: number) {
+    const response = await api.get<IMoedas>(`/moedas/${id}`)
+    return response.data            
+}

@@ -10,6 +10,7 @@
     v-else
     @click="emit('onClickNext', props.pagina + 1)"
     class="hover:text-red-800"
+    :disabled="props.ultimaPagina"
   >
     <PhCaretRight weight="bold" :size="30" />
   </button>
