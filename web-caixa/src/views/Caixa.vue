@@ -3,13 +3,13 @@
     <div class="flex justify-center w-full">
       <img src="../assets/FANS.png" class="h-32 object-center object-contain" />
     </div>
-    <div class="flex w-full px-10 gap-10 justify-between mx-auto mb-1">
+    <div class="flex px-10 gap-10 justify-between mx-auto mb-1">
       <AppCards :valor-caixa="saldoDisplay" :valor-carteira="saldoEstoqueDisplay" :data="dataAtual" />
     </div>
 
     <div class="pagina mx-auto rounded-xl px-10 mb-5 mt-5">
       <div class="flex text-main justify-start text-2xl font-bold mx-auto max-w-7xl">
-        <h1>CONTROLE DE CAIXA</h1>
+        <h1>CAIXA REPROGRAFIA</h1>
       </div>
       <form @submit.prevent="" class="bg-zinc-200 border p-5 rounded-xl">
         <div class="flex justify-between w-full gap-10">
@@ -49,7 +49,7 @@
                     :ultima-pagina="dadosTransacao?.last ?? false" :primeira-pagina="dadosTransacao?.first ?? false"
                     :total-paginas="dadosTransacao?.totalPages ?? 0" :total-registros="dadosTransacao?.totalElements ?? 0"
                     @on-click-back="onPaginaMudou" />
-                  <div class="flex justify-between space-x-24">
+                  <div class="flex justify-between md:space-x-36">
                     <div class="font-bold">Tipo</div>
                     <div class="font-bold">Valor</div>
                     <div class="font-bold">Data</div>
@@ -74,21 +74,21 @@
         </div>
         <div class="flex w-full justify-between mt-2 bg-zinc-100 border border-zinc-300 p-5 rounded-md">
           <div class="w-2/5">
-            <label for="valor" class="font-bold text-sm">QUANTIDADE MOEDAS</label>
+            <label for="valor" class="font-bold text-sm px-2">QUANTIDADE MOEDAS</label>
             <div class="flex flex-col border p-5 rounded-xl">
               <div class="grid grid-cols-3">
-                <div class="font-bold">Descrição</div>
-                <div class="font-bold">Quantidade</div>
+                <div class="font-bold text-sm">Descrição</div>
+                <div class="font-bold text-sm">Quantidade</div>
               </div>
               <AppModalAlteracao :abre-modal="exibirModal" @on-close="onCloseModal" :item="itemMoeda" />
 
-              <div v-for="item in dadosMoedas" class="grid grid-cols-3 gap-y-3" :key="item.id">
+              <div v-for="item in dadosMoedas" class="grid grid-cols-3 mt-2" :key="item.id">
                 <div>
                   {{ item.descricao }}
                 </div>
                 <div>{{ item.quantidade }}</div>
                 <div class="flex w-full justify-end">
-                  <button class="border px-5 bg-red-800 text-white" @click="onAlterarQuantidadeMoeda(item)">
+                  <button class="border px-3 bg-red-800 text-white" @click="onAlterarQuantidadeMoeda(item)">
                     <PhSwap :size="24" />
                   </button>
 
@@ -183,6 +183,8 @@ function onFormatarTipoTransacao(nome: string) {
       return "Entrada";
     case "S":
       return "Saída";
+    case "T":
+      return "Transferência"
     default:
       break;
   }
