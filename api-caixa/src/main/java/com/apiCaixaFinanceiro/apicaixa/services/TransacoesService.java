@@ -3,8 +3,11 @@ package com.apiCaixaFinanceiro.apicaixa.services;
 import com.apiCaixaFinanceiro.apicaixa.entities.TransacoesEntity;
 import com.apiCaixaFinanceiro.apicaixa.exceptions.BadRequestException;
 import com.apiCaixaFinanceiro.apicaixa.exceptions.ResouceNotFoundException;
+import com.apiCaixaFinanceiro.apicaixa.models.DTO.DadosTransacaoDTO;
+import com.apiCaixaFinanceiro.apicaixa.models.DTO.GerarRelatorioDTO;
 import com.apiCaixaFinanceiro.apicaixa.repositories.CaixaRepository;
 import com.apiCaixaFinanceiro.apicaixa.repositories.TransacoesRepository;
+import com.itextpdf.text.DocumentException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +21,12 @@ import java.util.Optional;
 public class TransacoesService {
     private final CaixaRepository caixaRepository;
     private final TransacoesRepository transacoesRepository;
-    public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository) {
+    private final RelatorioCaixaService relatorioCaixaService;
+
+    public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository, RelatorioCaixaService relatorioCaixaService) {
         this.caixaRepository = caixaRepository;
         this.transacoesRepository = transacoesRepository;
+        this.relatorioCaixaService = relatorioCaixaService;
     }
 
     @Transactional
@@ -45,12 +51,34 @@ public class TransacoesService {
                 break;
             }
             case "T": {
-                var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+                var newSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
                 saldoCaixa.setSaldo(newSaldo);
 
-                var newSaldoEstoque = saldoCaixa.getSaldoEstoque().add(transacoesEntity.getValorTransacao());
+                var newSaldoEstoque = saldoCaixa.getSaldoEstoque().subtract(transacoesEntity.getValorTransacao());
                 saldoCaixa.setSaldoEstoque(newSaldoEstoque);
                  caixaRepository.save(saldoCaixa);
+                 break;
+            }
+            case "R" : {
+                var newSaldoEstoque = saldoCaixa.getSaldoEstoque().add(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldoEstoque(newSaldoEstoque);
+
+                var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldo(newSaldo);
+                caixaRepository.save(saldoCaixa);
+                break;
+            }
+
+            case "X": {
+
+                if (transacoesEntity.getValorTransacao().compareTo(saldoCaixa.getSaldo()) > 0) {
+                   throw new BadRequestException("O Valor informado e maior que o saldo disponivel.");
+                }
+
+                var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldo(newSaldo);
+                caixaRepository.save(saldoCaixa);
+                break;
             }
             default: {
                 break;
@@ -72,5 +100,4 @@ public class TransacoesService {
             throw new ResouceNotFoundException(id);
         }
     }
-
 }

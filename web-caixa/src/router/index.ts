@@ -5,14 +5,7 @@ const routes = [
   {
     path: "/",
     component: Caixa,
-    childrean: [
-      {
-        path: "/:id",
-        component: () => import('../views/Caixa.vue'),
-      }
-    ]
   },
-
 ];
 
 const router = createRouter({

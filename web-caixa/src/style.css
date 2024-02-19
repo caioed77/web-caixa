@@ -16,14 +16,6 @@ body {
 
 @layer components {
   .pagina {
-    @apply pl-4 pr-4 pt-4 md:px-4 xl:px-16 h-screen xl:h-auto mx-auto lg:max-w-7xl bg-white;
-  }
-
-  .legenda {
-    @apply font-bold pb-2;
-  }
-
-  .barra-titulo {
-    @apply flex gap-3 items-center text-lg p-2 font-bold text-main;
+    @apply pl-4 border border-zinc-300 pr-4 pt-4 md:px-4 xl:px-16 h-screen xl:h-auto mx-auto lg:max-w-7xl bg-zinc-200;
   }
 }
