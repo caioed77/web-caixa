@@ -3,6 +3,7 @@ package com.apiCaixaFinanceiro.apicaixa.services;
 import com.apiCaixaFinanceiro.apicaixa.entities.CaixaEntity;
 import com.apiCaixaFinanceiro.apicaixa.models.DTO.DadosTransacaoDTO;
 import com.apiCaixaFinanceiro.apicaixa.models.DTO.GerarRelatorioDTO;
+import com.apiCaixaFinanceiro.apicaixa.models.DTO.RetornaSaldoDTO;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,15 +35,15 @@ public class RelatorioCaixaService {
 
 
       public final ByteArrayOutputStream gerarRelatorio(GerarRelatorioDTO query) throws DocumentException {
-
             var caixa = caixaService.retornaSaldoCaixa(1L).get();
-            var transacoes = obtemTransacoes(query.dataInicial(), query.dataFinal(), query.tipoTransacao());
+            var Totaltransacoes = obtemSaldoTransacao(query.dataInicial(), query.dataFinal(), query.tipoTransacao());
+            var transacoes = obtemDadosTransacoes(query.dataInicial(), query.dataFinal(), query.tipoTransacao());
 
-            return  generatePdfStream(transacoes, caixa);
+            return generatePdfStream(transacoes, caixa, Totaltransacoes);
       }
 
 
-      private static ByteArrayOutputStream generatePdfStream(List<DadosTransacaoDTO> dadosTransacoes, CaixaEntity dadosCaixa) throws DocumentException {
+      private static ByteArrayOutputStream generatePdfStream(List<DadosTransacaoDTO> dadosTransacoes, CaixaEntity dadosCaixa, List<RetornaSaldoDTO> saldoTotalTransacoes) throws DocumentException {
             Document document = new Document();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, outputStream);
@@ -72,6 +73,11 @@ public class RelatorioCaixaService {
                         document.add(new Paragraph("\n"));
                   }
 
+                  document.add(new Paragraph("Saldo Total"));
+                  var paragraphSaldoTotal = new Paragraph(String.valueOf(saldoTotalTransacoes.get(0).Saldo()));
+                  document.add(paragraphSaldoTotal);
+
+
             } finally {
                   document.close();
             }
@@ -80,36 +86,39 @@ public class RelatorioCaixaService {
       }
 
 
-      private List<DadosTransacaoDTO> obtemTransacoes(LocalDate dataInicial, LocalDate dataFinal, String tipoTransacao) {
+      private List<RetornaSaldoDTO> obtemSaldoTransacao(LocalDate dataInicial, LocalDate dataFinal, String tipoTransacao) {
             var sqlTransacao = new StringBuilder();
-            sqlTransacao.append("SELECT SUM(valor_transacao) AS saldo ");
-            sqlTransacao.append("FROM transacoes ");
+            sqlTransacao.append("SELECT SUM(t.valor_transacao) AS saldo ");
+            sqlTransacao.append("FROM transacoes t ");
             sqlTransacao.append("WHERE 1=1 ");
 
             var listaParametros = new ArrayList<Object>();
 
             if (dataInicial != null) {
-                  sqlTransacao.append("AND data_transacao >= ? ");
+                  sqlTransacao.append("AND t.data_transacao >= ? ");
                   listaParametros.add(dataInicial);
             }
 
             if (dataFinal != null) {
-                  sqlTransacao.append("AND data_transacao <= ? ");
+                  sqlTransacao.append("AND t.data_transacao <= ? ");
                   listaParametros.add(dataFinal);
             }
 
             if (!Objects.equals(tipoTransacao, "")) {
-                  sqlTransacao.append("AND tipo_transacao = ? ");
+                  sqlTransacao.append("AND t.tipo_transacao = ? ");
                   listaParametros.add(tipoTransacao);
             }
 
             return jdbcTemplate.query(sqlTransacao.toString(), listaParametros.toArray(), transacaoRowMapper);
       }
 
-      private final RowMapper<DadosTransacaoDTO> transacaoRowMapper =
-              (rs, rowNum) -> new DadosTransacaoDTO(
-                      rs.getBigDecimal("valor_transacao"),
-                      rs.getString("tipo_transacao"),
-                      rs.getDate("data_transacao").toLocalDate()
+
+      private List<DadosTransacaoDTO> obtemDadosTransacoes(LocalDate dataInicial, LocalDate dataFinal, String tipoTransacao) {
+            return  new ArrayList<>();
+      }
+
+      private final RowMapper<RetornaSaldoDTO> transacaoRowMapper =
+              (rs, rowNum) -> new RetornaSaldoDTO(
+                      rs.getBigDecimal("Saldo")
               );
 }
