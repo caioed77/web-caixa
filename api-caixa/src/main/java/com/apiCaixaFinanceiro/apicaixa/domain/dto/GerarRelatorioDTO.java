@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.models.DTO;
+package com.apiCaixaFinanceiro.apicaixa.domain.dto;
 
 import java.time.LocalDate;
 

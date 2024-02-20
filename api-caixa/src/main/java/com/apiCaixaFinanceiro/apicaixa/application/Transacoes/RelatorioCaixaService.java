@@ -1,9 +1,10 @@
-package com.apiCaixaFinanceiro.apicaixa.services;
+package com.apiCaixaFinanceiro.apicaixa.application.Transacoes;
 
-import com.apiCaixaFinanceiro.apicaixa.entities.CaixaEntity;
-import com.apiCaixaFinanceiro.apicaixa.models.DTO.DadosTransacaoDTO;
-import com.apiCaixaFinanceiro.apicaixa.models.DTO.GerarRelatorioDTO;
-import com.apiCaixaFinanceiro.apicaixa.models.DTO.RetornaSaldoDTO;
+import com.apiCaixaFinanceiro.apicaixa.application.Caixa.CaixaService;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
+import com.apiCaixaFinanceiro.apicaixa.domain.dto.DadosTransacaoDTO;
+import com.apiCaixaFinanceiro.apicaixa.domain.dto.GerarRelatorioDTO;
+import com.apiCaixaFinanceiro.apicaixa.domain.dto.RetornaSaldoDTO;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,7 +1,7 @@
 package com.apiCaixaFinanceiro.apicaixa.controllers;
 
-import com.apiCaixaFinanceiro.apicaixa.entities.MoedasEntity;
-import com.apiCaixaFinanceiro.apicaixa.services.MoedasService;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.MoedasEntity;
+import com.apiCaixaFinanceiro.apicaixa.application.Moeda.MoedasService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

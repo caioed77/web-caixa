@@ -1,8 +1,8 @@
 package com.apiCaixaFinanceiro.apicaixa.controllers.exception;
 
 
-import com.apiCaixaFinanceiro.apicaixa.exceptions.BadRequestException;
-import com.apiCaixaFinanceiro.apicaixa.exceptions.ResouceNotFoundException;
+import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.BadRequestException;
+import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.ResouceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

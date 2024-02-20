@@ -3,7 +3,7 @@ import { useErroStore } from "../store/errorStore";
 import { useLoadingStore } from "../store/loadingStore";
 
 export const api = axios.create({
-  baseURL: "http://192.168.1.131:8080",
+  baseURL: "http://192.168.1.82:8080",
   headers: {
     "Content-Type": "application/json",
   },

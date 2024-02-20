@@ -1,7 +1,7 @@
 package com.apiCaixaFinanceiro.apicaixa.controllers;
 
-import com.apiCaixaFinanceiro.apicaixa.entities.CaixaEntity;
-import com.apiCaixaFinanceiro.apicaixa.services.CaixaService;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
+import com.apiCaixaFinanceiro.apicaixa.application.Caixa.CaixaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,17 +1,16 @@
-package com.apiCaixaFinanceiro.apicaixa.services;
+package com.apiCaixaFinanceiro.apicaixa.application.Transacoes;
 
-import com.apiCaixaFinanceiro.apicaixa.entities.TransacoesEntity;
-import com.apiCaixaFinanceiro.apicaixa.exceptions.BadRequestException;
-import com.apiCaixaFinanceiro.apicaixa.exceptions.ResouceNotFoundException;
-import com.apiCaixaFinanceiro.apicaixa.repositories.CaixaRepository;
-import com.apiCaixaFinanceiro.apicaixa.repositories.TransacoesRepository;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
+import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.BadRequestException;
+import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.ResouceNotFoundException;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositories.CaixaRepository;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositories.TransacoesRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
