@@ -28,15 +28,14 @@ interface IProps {
     padding?: string;
 }
 
-const handleDate = (modelData: any) => {
+const handleDate = (modelData: Date | null) => {
     if (modelData !== null) {
-        const data = moment(modelData).format("MM/DD/yyyy");
+        const data = moment(modelData).format("DD/MM/yyyy");
         emit("update:modelValue", data);
     } else {
         emit("update:modelValue", "");
     }
 };
-
 const emit = defineEmits<{
     (event: "update:modelValue", payload: string): void;
 }>();
