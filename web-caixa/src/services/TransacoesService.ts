@@ -7,10 +7,11 @@ export async function onGravarTransacao(dados: ITransacoes) {
 }
 
 export async function onRetornarTransacoes(
-  pagina: number
+  pagina: number,
+  data: string
 ): Promise<IPaginacao<ITransacoes>> {
   const response = await api.get<IPaginacao<ITransacoes>>(
-    `/transacoes/retornarTransacoes?page=${pagina}&size=7`
+    `/transacoes/retornarTransacoes?data=${data}&page=${pagina}&size=7`
   );
   return response.data;
 }

@@ -15,7 +15,7 @@
     </div>
     <div
         class="flex w-1/2 flex-col items-center px-6 py-4 text-xl border border-zinc-300 text-white bg-red-800 rounded-xl">
-        <AppDateBox label="Data" v-model="props.data" />
+        <AppDateBox label="Data" v-model="model" />
     </div>
 </template>
 
@@ -23,11 +23,13 @@
 import { PhMoney, PhWallet } from "@phosphor-icons/vue";
 import AppDateBox from "./AppDateBox.vue";
 
-interface IProps {
-    data: string;
+interface IProps {    
     valorCaixa: number;
     valorCarteira: number;
 }
 
 const props = defineProps<IProps>();
+
+const model = defineModel<string>({default: ''})
+
 </script>

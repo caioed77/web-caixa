@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,8 +34,8 @@ public class TransacoesController {
     }
 
     @GetMapping(value = "/retornarTransacoes")
-    public ResponseEntity<Page<TransacoesEntity>> retonarTransacoes(Pageable pageable) {
-        return ResponseEntity.ok(transacoesService.retornaTransacao(pageable));
+    public ResponseEntity<Page<TransacoesEntity>> retonarTransacoes(Pageable pageable, @RequestParam LocalDate data) {
+        return ResponseEntity.ok(transacoesService.retornaTransacao(pageable, data));
     }
 
     @PostMapping(value = "/gerarRelatorio")

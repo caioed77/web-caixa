@@ -3,17 +3,14 @@ package com.apiCaixaFinanceiro.apicaixa.services;
 import com.apiCaixaFinanceiro.apicaixa.entities.TransacoesEntity;
 import com.apiCaixaFinanceiro.apicaixa.exceptions.BadRequestException;
 import com.apiCaixaFinanceiro.apicaixa.exceptions.ResouceNotFoundException;
-import com.apiCaixaFinanceiro.apicaixa.models.DTO.DadosTransacaoDTO;
-import com.apiCaixaFinanceiro.apicaixa.models.DTO.GerarRelatorioDTO;
 import com.apiCaixaFinanceiro.apicaixa.repositories.CaixaRepository;
 import com.apiCaixaFinanceiro.apicaixa.repositories.TransacoesRepository;
-import com.itextpdf.text.DocumentException;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,8 +76,8 @@ public class TransacoesService {
         transacoesRepository.save(transacoesEntity);
     }
 
-    public Page<TransacoesEntity> retornaTransacao(Pageable pageable) {
-       return transacoesRepository.findAll(pageable);
+    public Page<TransacoesEntity> retornaTransacao(Pageable pageable, LocalDate data) {
+       return transacoesRepository.retornarTransacoes(pageable, data);
     }
 
     public TransacoesEntity retornarTransacoesPorId(Long id){

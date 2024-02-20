@@ -9,7 +9,7 @@
             <AppCards
                 :valor-caixa="saldoDisplay"
                 :valor-carteira="saldoEstoqueDisplay"
-                :data="dataAtual" />
+                v-model="dataAtual" />
         </div>
 
         <div class="pagina mx-auto rounded-xl px-10 mb-5 mt-5">
@@ -233,7 +233,7 @@ async function onRealizarTransacao() {
 }
 
 async function onDadosTransacao(pagina: number) {
-    const dados = await onRetornarTransacoes(pagina);
+    const dados = await onRetornarTransacoes(pagina, dataAtual.value);
 
     if (dados !== undefined && "number" in dados) {
         dadosTransacao.value = dados;
