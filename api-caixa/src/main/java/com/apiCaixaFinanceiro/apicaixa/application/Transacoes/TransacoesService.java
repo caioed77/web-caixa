@@ -17,9 +17,9 @@ import java.util.Optional;
 public class TransacoesService {
     private final CaixaRepository caixaRepository;
     private final TransacoesRepository transacoesRepository;
-    private final RelatorioCaixaService relatorioCaixaService;
+    private final RelatorioTransacoesService relatorioCaixaService;
 
-    public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository, RelatorioCaixaService relatorioCaixaService) {
+    public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository, RelatorioTransacoesService relatorioCaixaService) {
         this.caixaRepository = caixaRepository;
         this.transacoesRepository = transacoesRepository;
         this.relatorioCaixaService = relatorioCaixaService;

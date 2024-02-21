@@ -2,7 +2,7 @@ package com.apiCaixaFinanceiro.apicaixa.controllers;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
 import com.apiCaixaFinanceiro.apicaixa.domain.dto.GerarRelatorioDTO;
-import com.apiCaixaFinanceiro.apicaixa.application.Transacoes.RelatorioCaixaService;
+import com.apiCaixaFinanceiro.apicaixa.application.Transacoes.RelatorioTransacoesService;
 import com.apiCaixaFinanceiro.apicaixa.application.Transacoes.TransacoesService;
 import com.itextpdf.text.DocumentException;
 import org.springframework.data.domain.Page;
@@ -18,9 +18,9 @@ public class TransacoesController {
 
     private final TransacoesService transacoesService;
 
-    private final RelatorioCaixaService relatorioCaixaService;
+    private final RelatorioTransacoesService relatorioCaixaService;
 
-    public TransacoesController(TransacoesService transacoesService, RelatorioCaixaService relatorioCaixaService){
+    public TransacoesController(TransacoesService transacoesService, RelatorioTransacoesService relatorioCaixaService){
         this.transacoesService = transacoesService;
         this.relatorioCaixaService = relatorioCaixaService;
     }

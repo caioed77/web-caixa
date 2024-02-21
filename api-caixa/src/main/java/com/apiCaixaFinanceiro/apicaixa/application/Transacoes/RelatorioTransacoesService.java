@@ -20,13 +20,13 @@ import java.util.*;
 import java.util.List;
 
 @Service
-public class RelatorioCaixaService {
+public class RelatorioTransacoesService {
       @Value("${caminho.Relatorio}")
       public String caminhoRelatorio;
       private final CaixaService caixaService;
       private final JdbcTemplate jdbcTemplate;
 
-      public RelatorioCaixaService(CaixaService caixaService, JdbcTemplate jdbcTemplate) {
+      public RelatorioTransacoesService(CaixaService caixaService, JdbcTemplate jdbcTemplate) {
             this.caixaService = caixaService;
             this.jdbcTemplate = jdbcTemplate;
       }
@@ -109,7 +109,7 @@ public class RelatorioCaixaService {
 
       private List<DadosTransacaoDTO> obtemDadosTransacoes(LocalDate dataInicial, LocalDate dataFinal, String tipoTransacao) {
             var sqlTransacao = new StringBuilder();
-            sqlTransacao.append("SELECT  tipo_transacao as tipoTransacao, data_transacao as dataTransacao, valor_transacao as valorTransferencia ");
+            sqlTransacao.append("SELECT tipo_transacao as tipoTransacao, data_transacao as dataTransacao, valor_transacao as valorTransferencia ");
             sqlTransacao.append("FROM transacoes ");
             sqlTransacao.append("WHERE 1=1 ");
 
@@ -129,6 +129,7 @@ public class RelatorioCaixaService {
                   sqlTransacao.append("AND tipo_transacao = ? ");
                   listaParametros.add(tipoTransacao);
             }
+
 
             return jdbcTemplate.query(sqlTransacao.toString(), listaParametros.toArray(), transacaoRowMapper);
       }
