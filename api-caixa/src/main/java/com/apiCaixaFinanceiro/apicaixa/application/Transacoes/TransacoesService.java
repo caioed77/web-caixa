@@ -1,5 +1,6 @@
 package com.apiCaixaFinanceiro.apicaixa.application.Transacoes;
 
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
 import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.BadRequestException;
 import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.ResouceNotFoundException;
@@ -29,6 +30,11 @@ public class TransacoesService {
     public void gravarTransacao(TransacoesEntity transacoesEntity) {
         var saldoCaixa = caixaRepository.findById(1L).get();
 
+        validaSaidaSaldo(transacoesEntity, saldoCaixa);
+        transacoesRepository.save(transacoesEntity);
+    }
+
+    private void validaSaidaSaldo(TransacoesEntity transacoesEntity, CaixaEntity saldoCaixa) {
         switch (transacoesEntity.getTipoTransacao()) {
             case "S" -> {
                 if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
@@ -72,7 +78,6 @@ public class TransacoesService {
             default -> {
             }
         }
-        transacoesRepository.save(transacoesEntity);
     }
 
     public Page<TransacoesEntity> retornaTransacao(Pageable pageable, LocalDate data) {
