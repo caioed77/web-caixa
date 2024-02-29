@@ -8,6 +8,7 @@ import com.apiCaixaFinanceiro.apicaixa.domain.dto.RetornaSaldoDTO;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -65,7 +66,7 @@ public class RelatorioTransacoesService {
 
                         var paragraphTipo = getTipo(row);
                         var dataTransactionFormat = row.dataTransacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
+                        
                         table.addCell(paragraphTipo);
                         table.addCell(new Paragraph("\n"));
 
@@ -133,21 +134,7 @@ public class RelatorioTransacoesService {
             sqlTransacao.append("WHERE 1=1 ");
 
             var listaParametros = new ArrayList<Object>();
-
-            if (dataInicial != null) {
-                  sqlTransacao.append("AND t.data_transacao >= ? ");
-                  listaParametros.add(dataInicial);
-            }
-
-            if (dataFinal != null) {
-                  sqlTransacao.append("AND t.data_transacao <= ? ");
-                  listaParametros.add(dataFinal);
-            }
-
-            if (!Objects.equals(tipoTransacao, "")) {
-                  sqlTransacao.append("AND t.tipo_transacao = ? ");
-                  listaParametros.add(tipoTransacao);
-            }
+            filtrosSQL(dataInicial, dataFinal, tipoTransacao, sqlTransacao, listaParametros);
 
             return jdbcTemplate.query(sqlTransacao.toString(), listaParametros.toArray(), transacaoSaldoRowMapper);
       }
@@ -159,7 +146,12 @@ public class RelatorioTransacoesService {
             sqlTransacao.append("WHERE 1=1 ");
 
             var listaParametros = new ArrayList<Object>();
+            filtrosSQL(dataInicial, dataFinal, tipoTransacao, sqlTransacao, listaParametros);
 
+            return jdbcTemplate.query(sqlTransacao.toString(), listaParametros.toArray(), transacaoRowMapper);
+      }
+
+      private static void filtrosSQL(LocalDate dataInicial, LocalDate dataFinal, String tipoTransacao, StringBuilder sqlTransacao, ArrayList<Object> listaParametros) {
             if (dataInicial != null) {
                   sqlTransacao.append("AND data_transacao >= ? ");
                   listaParametros.add(dataInicial);
@@ -174,9 +166,6 @@ public class RelatorioTransacoesService {
                   sqlTransacao.append("AND tipo_transacao = ? ");
                   listaParametros.add(tipoTransacao);
             }
-
-
-            return jdbcTemplate.query(sqlTransacao.toString(), listaParametros.toArray(), transacaoRowMapper);
       }
 
       private final RowMapper<RetornaSaldoDTO> transacaoSaldoRowMapper =
