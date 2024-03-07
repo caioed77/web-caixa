@@ -127,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, watch } from "vue";
 import {
 	onGravarTransacao,
 	onRetornarTransacoes,
@@ -265,5 +265,11 @@ onMounted(() => {
 	onDadosTransacao(0);
 	onRetonarSaldoCaixa(1);
 	onRetornarMoedas();
+});
+
+watch(dataAtual, async (_newValue) => {  
+  if (dadosTransacao.value && dadosTransacao.value.number !== undefined) {
+    await onDadosTransacao(dadosTransacao.value.number);
+  }
 });
 </script>

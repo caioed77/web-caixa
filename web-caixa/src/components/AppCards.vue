@@ -30,6 +30,6 @@ interface IProps {
 
 const props = defineProps<IProps>();
 
-const model = defineModel<string>({default: ''})
+const model = defineModel<string>()
 
 </script>
