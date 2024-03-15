@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.Config;
+package com.apiCaixaFinanceiro.apicaixa.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

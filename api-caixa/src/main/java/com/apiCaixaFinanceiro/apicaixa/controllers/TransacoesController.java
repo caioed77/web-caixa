@@ -1,10 +1,9 @@
 package com.apiCaixaFinanceiro.apicaixa.controllers;
 
-import com.apiCaixaFinanceiro.apicaixa.entities.TransacoesEntity;
-import com.apiCaixaFinanceiro.apicaixa.models.DTO.DadosTransacaoDTO;
-import com.apiCaixaFinanceiro.apicaixa.models.DTO.GerarRelatorioDTO;
-import com.apiCaixaFinanceiro.apicaixa.services.RelatorioCaixaService;
-import com.apiCaixaFinanceiro.apicaixa.services.TransacoesService;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
+import com.apiCaixaFinanceiro.apicaixa.domain.dto.GerarRelatorioDTO;
+import com.apiCaixaFinanceiro.apicaixa.application.Transacoes.RelatorioTransacoesService;
+import com.apiCaixaFinanceiro.apicaixa.application.Transacoes.TransacoesService;
 import com.itextpdf.text.DocumentException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/transacoes")
@@ -20,9 +18,9 @@ public class TransacoesController  {
 
     private final TransacoesService transacoesService;
 
-    private final RelatorioCaixaService relatorioCaixaService;
+    private final RelatorioTransacoesService relatorioCaixaService;
 
-    public TransacoesController(TransacoesService transacoesService, RelatorioCaixaService relatorioCaixaService){
+    public TransacoesController(TransacoesService transacoesService, RelatorioTransacoesService relatorioCaixaService){
         this.transacoesService = transacoesService;
         this.relatorioCaixaService = relatorioCaixaService;
     }

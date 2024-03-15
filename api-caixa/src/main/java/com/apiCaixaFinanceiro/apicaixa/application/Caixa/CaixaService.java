@@ -1,7 +1,7 @@
-package com.apiCaixaFinanceiro.apicaixa.services;
+package com.apiCaixaFinanceiro.apicaixa.application.Caixa;
 
-import com.apiCaixaFinanceiro.apicaixa.entities.CaixaEntity;
-import com.apiCaixaFinanceiro.apicaixa.repositories.CaixaRepository;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositories.CaixaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -1,26 +1,26 @@
-package com.apiCaixaFinanceiro.apicaixa.services;
+package com.apiCaixaFinanceiro.apicaixa.application.Transacoes;
 
-import com.apiCaixaFinanceiro.apicaixa.entities.TransacoesEntity;
-import com.apiCaixaFinanceiro.apicaixa.exceptions.BadRequestException;
-import com.apiCaixaFinanceiro.apicaixa.exceptions.ResouceNotFoundException;
-import com.apiCaixaFinanceiro.apicaixa.repositories.CaixaRepository;
-import com.apiCaixaFinanceiro.apicaixa.repositories.TransacoesRepository;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
+import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.BadRequestException;
+import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.ResouceNotFoundException;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositories.CaixaRepository;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositories.TransacoesRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TransacoesService {
     private final CaixaRepository caixaRepository;
     private final TransacoesRepository transacoesRepository;
-    private final RelatorioCaixaService relatorioCaixaService;
+    private final RelatorioTransacoesService relatorioCaixaService;
 
-    public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository, RelatorioCaixaService relatorioCaixaService) {
+    public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository, RelatorioTransacoesService relatorioCaixaService) {
         this.caixaRepository = caixaRepository;
         this.transacoesRepository = transacoesRepository;
         this.relatorioCaixaService = relatorioCaixaService;
@@ -30,6 +30,11 @@ public class TransacoesService {
     public void gravarTransacao(TransacoesEntity transacoesEntity) {
         var saldoCaixa = caixaRepository.findById(1L).get();
 
+        validaSaidaSaldo(transacoesEntity, saldoCaixa);
+        transacoesRepository.save(transacoesEntity);
+    }
+
+    private void validaSaidaSaldo(TransacoesEntity transacoesEntity, CaixaEntity saldoCaixa) {
         switch (transacoesEntity.getTipoTransacao()) {
             case "S" -> {
                 if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
@@ -73,7 +78,6 @@ public class TransacoesService {
             default -> {
             }
         }
-        transacoesRepository.save(transacoesEntity);
     }
 
     public Page<TransacoesEntity> retornaTransacao(Pageable pageable, LocalDate data) {

@@ -1,6 +1,6 @@
-package com.apiCaixaFinanceiro.apicaixa.repositories;
+package com.apiCaixaFinanceiro.apicaixa.infra.repositories;
 
-import com.apiCaixaFinanceiro.apicaixa.entities.MoedasEntity;
+import com.apiCaixaFinanceiro.apicaixa.domain.entities.MoedasEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MoedasRepository extends JpaRepository<MoedasEntity, Long> {

@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.exceptions;
+package com.apiCaixaFinanceiro.apicaixa.infra.exceptions;
 
 public class ResouceNotFoundException extends RuntimeException {
       public ResouceNotFoundException(Object id){

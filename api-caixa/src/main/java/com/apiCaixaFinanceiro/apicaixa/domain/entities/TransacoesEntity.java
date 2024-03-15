@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.entities;
+package com.apiCaixaFinanceiro.apicaixa.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
