@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/transacoes")
-public class TransacoesController {
+public class TransacoesController  {
 
     private final TransacoesService transacoesService;
 

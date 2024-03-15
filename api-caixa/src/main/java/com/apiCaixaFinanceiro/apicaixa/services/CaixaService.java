@@ -15,7 +15,6 @@ public class CaixaService {
             this.caixaRepository = caixaRepository;
       }
 
-
       public Optional<CaixaEntity> retornaSaldoCaixa(Long id) {
             return Optional.of(caixaRepository.findById(id).get());
       }
