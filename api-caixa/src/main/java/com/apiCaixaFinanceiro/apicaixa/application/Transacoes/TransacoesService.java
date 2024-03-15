@@ -7,11 +7,14 @@ import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.ResouceNotFoundException
 import com.apiCaixaFinanceiro.apicaixa.infra.repositories.CaixaRepository;
 import com.apiCaixaFinanceiro.apicaixa.infra.repositories.TransacoesRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -93,4 +96,15 @@ public class TransacoesService {
             throw new ResouceNotFoundException(id);
         }
     }
+
+    public List<TransacoesEntity> retornarPesquisaPorFiltro(TransacoesEntity filtros) {
+        var matcher = ExampleMatcher.matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.matching().getDefaultStringMatcher().CONTAINING);
+
+        var example = Example.of(filtros, matcher);
+        return transacoesRepository.findAll(example);
+    }
+
+
 }
