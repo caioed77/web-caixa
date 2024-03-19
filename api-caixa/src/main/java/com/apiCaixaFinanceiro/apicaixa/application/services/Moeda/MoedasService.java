@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.application.Moeda;
+package com.apiCaixaFinanceiro.apicaixa.application.services.Moeda;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.MoedasEntity;
 import com.apiCaixaFinanceiro.apicaixa.domain.repositories.MoedasRepository;

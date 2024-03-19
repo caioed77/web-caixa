@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.application.Transacoes;
+package com.apiCaixaFinanceiro.apicaixa.application.services.Transacoes;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.dto.FiltroTransacoesDTO;
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
@@ -7,8 +7,6 @@ import com.apiCaixaFinanceiro.apicaixa.domain.repositories.CaixaRepository;
 import com.apiCaixaFinanceiro.apicaixa.domain.repositories.TransacoesRepository;
 import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.BadRequestException;
 import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.ResouceNotFoundException;
-import com.apiCaixaFinanceiro.apicaixa.infra.repositoriesJpa.CaixaRepositoryJpa;
-import com.apiCaixaFinanceiro.apicaixa.infra.repositoriesJpa.TransacoesRepositoryJpa;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;

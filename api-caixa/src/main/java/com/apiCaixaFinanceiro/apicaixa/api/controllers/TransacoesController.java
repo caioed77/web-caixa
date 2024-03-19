@@ -2,8 +2,8 @@ package com.apiCaixaFinanceiro.apicaixa.api.controllers;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
 import com.apiCaixaFinanceiro.apicaixa.domain.dto.GerarRelatorioDTO;
-import com.apiCaixaFinanceiro.apicaixa.application.Transacoes.RelatorioTransacoesService;
-import com.apiCaixaFinanceiro.apicaixa.application.Transacoes.TransacoesService;
+import com.apiCaixaFinanceiro.apicaixa.application.services.Transacoes.RelatorioTransacoesService;
+import com.apiCaixaFinanceiro.apicaixa.application.services.Transacoes.TransacoesService;
 import com.itextpdf.text.DocumentException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

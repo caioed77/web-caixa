@@ -1,6 +1,6 @@
-package com.apiCaixaFinanceiro.apicaixa.application.Transacoes;
+package com.apiCaixaFinanceiro.apicaixa.application.services.Transacoes;
 
-import com.apiCaixaFinanceiro.apicaixa.application.Caixa.CaixaService;
+import com.apiCaixaFinanceiro.apicaixa.application.services.Caixa.CaixaService;
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
 import com.apiCaixaFinanceiro.apicaixa.domain.dto.DadosTransacaoDTO;
 import com.apiCaixaFinanceiro.apicaixa.domain.dto.GerarRelatorioDTO;
@@ -8,7 +8,6 @@ import com.apiCaixaFinanceiro.apicaixa.domain.dto.RetornaSaldoDTO;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;

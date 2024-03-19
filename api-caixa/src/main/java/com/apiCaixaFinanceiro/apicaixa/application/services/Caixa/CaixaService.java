@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.application.Caixa;
+package com.apiCaixaFinanceiro.apicaixa.application.services.Caixa;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
 import com.apiCaixaFinanceiro.apicaixa.domain.repositories.CaixaRepository;
