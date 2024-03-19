@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.controllers.exception;
+package com.apiCaixaFinanceiro.apicaixa.api.controllers.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

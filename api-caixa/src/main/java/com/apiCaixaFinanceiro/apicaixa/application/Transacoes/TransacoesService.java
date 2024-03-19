@@ -1,17 +1,17 @@
 package com.apiCaixaFinanceiro.apicaixa.application.Transacoes;
 
+import com.apiCaixaFinanceiro.apicaixa.domain.dto.FiltroTransacoesDTO;
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
+import com.apiCaixaFinanceiro.apicaixa.domain.repositories.CaixaRepository;
+import com.apiCaixaFinanceiro.apicaixa.domain.repositories.TransacoesRepository;
 import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.BadRequestException;
 import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.ResouceNotFoundException;
-import com.apiCaixaFinanceiro.apicaixa.infra.repositories.CaixaRepository;
-import com.apiCaixaFinanceiro.apicaixa.infra.repositories.TransacoesRepository;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositoriesJpa.CaixaRepositoryJpa;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositoriesJpa.TransacoesRepositoryJpa;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -97,13 +97,14 @@ public class TransacoesService {
         }
     }
 
-    public List<TransacoesEntity> retornarPesquisaPorFiltro(TransacoesEntity filtros) {
+    public List<TransacoesEntity> retornarPesquisaPorFiltro(FiltroTransacoesDTO filtros) {
+        ExampleMatcher.matching().getDefaultStringMatcher();
         var matcher = ExampleMatcher.matching()
                 .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.matching().getDefaultStringMatcher().CONTAINING);
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         var example = Example.of(filtros, matcher);
-        return transacoesRepository.findAll(example);
+        return transacoesRepository.findAll((Sort) example);
     }
 
 

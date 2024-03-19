@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.controllers;
+package com.apiCaixaFinanceiro.apicaixa.api.controllers;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.CaixaEntity;
 import com.apiCaixaFinanceiro.apicaixa.application.Caixa.CaixaService;

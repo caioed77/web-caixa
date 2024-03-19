@@ -1,8 +1,9 @@
 package com.apiCaixaFinanceiro.apicaixa.application.Moeda;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.MoedasEntity;
+import com.apiCaixaFinanceiro.apicaixa.domain.repositories.MoedasRepository;
 import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.BadRequestException;
-import com.apiCaixaFinanceiro.apicaixa.infra.repositories.MoedasRepository;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositoriesJpa.MoedasRepositoryJpa;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.apiCaixaFinanceiro.apicaixa.controllers;
+package com.apiCaixaFinanceiro.apicaixa.api.controllers;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
 import com.apiCaixaFinanceiro.apicaixa.domain.dto.GerarRelatorioDTO;

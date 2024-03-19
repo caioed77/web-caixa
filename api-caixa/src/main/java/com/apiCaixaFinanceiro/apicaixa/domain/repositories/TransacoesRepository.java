@@ -1,14 +1,15 @@
-package com.apiCaixaFinanceiro.apicaixa.infra.repositories;
+package com.apiCaixaFinanceiro.apicaixa.domain.repositories;
 
 import com.apiCaixaFinanceiro.apicaixa.domain.entities.TransacoesEntity;
+import com.apiCaixaFinanceiro.apicaixa.infra.repositoriesJpa.TransacoesRepositoryJpa;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+
 import java.time.LocalDate;
+import java.util.List;
 
-
-public interface TransacoesRepository extends JpaRepository<TransacoesEntity, Long> {
+public interface TransacoesRepository extends TransacoesRepositoryJpa {
 
     @Query(nativeQuery = true, value = """
             SELECT ID_TRANSACAO, DATA_TRANSACAO, TIPO_TRANSACAO, VALOR_TRANSACAO
@@ -16,6 +17,4 @@ public interface TransacoesRepository extends JpaRepository<TransacoesEntity, Lo
             WHERE (DATA_TRANSACAO IS NULL) OR (DATA_TRANSACAO = :data)                                     
             """)
     Page<TransacoesEntity> retornarTransacoes(Pageable pageable, LocalDate data);
-
-
 }
