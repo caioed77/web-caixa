@@ -10,7 +10,10 @@ import com.apiCaixaFinanceiro.apicaixa.infra.exceptions.ResouceNotFoundException
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -19,65 +22,74 @@ import java.util.Optional;
 public class TransacoesService {
     private final CaixaRepository caixaRepository;
     private final TransacoesRepository transacoesRepository;
-    private final RelatorioTransacoesService relatorioCaixaService;
+    private final PlatformTransactionManager transactionManager;
 
-    public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository, RelatorioTransacoesService relatorioCaixaService) {
+    public TransacoesService(CaixaRepository caixaRepository, TransacoesRepository transacoesRepository, PlatformTransactionManager transactionManager) {
         this.caixaRepository = caixaRepository;
         this.transacoesRepository = transacoesRepository;
-        this.relatorioCaixaService = relatorioCaixaService;
+        this.transactionManager = transactionManager;
     }
 
     @Transactional
     public void gravarTransacao(TransacoesEntity transacoesEntity) {
         var saldoCaixa = caixaRepository.findById(1L).get();
-
         validaSaidaSaldo(transacoesEntity, saldoCaixa);
-        transacoesRepository.save(transacoesEntity);
+        var transaction = transactionManager.getTransaction(new DefaultTransactionDefinition());
+
+        try {
+            transacoesRepository.save(transacoesEntity);
+            transactionManager.commit(transaction);
+        } catch (Exception e) {
+            transactionManager.rollback(transaction);
+            throw new BadRequestException("Erro ao salvar transação " + e);
+        }
     }
 
     private void validaSaidaSaldo(TransacoesEntity transacoesEntity, CaixaEntity saldoCaixa) {
-        switch (transacoesEntity.getTipoTransacao()) {
-            case "S" -> {
-                if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
-                    throw new BadRequestException("Você não possui saldo para essa transação");
+        var transaction = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+            BigDecimal novoSaldo = BigDecimal.ZERO;
+
+            switch (transacoesEntity.getTipoTransacao()) {
+                case "S" -> {
+                    if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
+                        throw new BadRequestException("Você não possui saldo para essa transação");
+                    }
+                    novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
                 }
-
-                var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
-                saldoCaixa.setSaldo(newSaldo);
-                caixaRepository.save(saldoCaixa);
-            }
-            case "E" -> {
-                var newSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
-                saldoCaixa.setSaldo(newSaldo);
-                caixaRepository.save(saldoCaixa);
-            }
-            case "T" -> {
-                var newSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
-                saldoCaixa.setSaldo(newSaldo);
-
-                var newSaldoEstoque = saldoCaixa.getSaldoEstoque().subtract(transacoesEntity.getValorTransacao());
-                saldoCaixa.setSaldoEstoque(newSaldoEstoque);
-                caixaRepository.save(saldoCaixa);
-            }
-            case "R" -> {
-                var newSaldoEstoque = saldoCaixa.getSaldoEstoque().add(transacoesEntity.getValorTransacao());
-                saldoCaixa.setSaldoEstoque(newSaldoEstoque);
-
-                var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
-                saldoCaixa.setSaldo(newSaldo);
-                caixaRepository.save(saldoCaixa);
-            }
-            case "X" -> {
-                if (transacoesEntity.getValorTransacao().compareTo(saldoCaixa.getSaldo()) > 0) {
-                    throw new BadRequestException("O Valor informado e maior que o saldo disponivel.");
+                case "E" -> {
+                    novoSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
                 }
+                case "T" -> {
+                    novoSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
 
-                var newSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
-                saldoCaixa.setSaldo(newSaldo);
-                caixaRepository.save(saldoCaixa);
+                    var newSaldoEstoque = saldoCaixa.getSaldoEstoque().subtract(transacoesEntity.getValorTransacao());
+                    saldoCaixa.setSaldoEstoque(newSaldoEstoque);
+                    caixaRepository.save(saldoCaixa);
+                }
+                case "R" -> {
+                    var newSaldoEstoque = saldoCaixa.getSaldoEstoque().add(transacoesEntity.getValorTransacao());
+                    saldoCaixa.setSaldoEstoque(newSaldoEstoque);
+
+                    novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+                }
+                case "X" -> {
+                    if (transacoesEntity.getValorTransacao().compareTo(saldoCaixa.getSaldo()) > 0) {
+                        throw new BadRequestException("O Valor informado e maior que o saldo disponivel.");
+                    }
+
+                    novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+                }
+                default -> {
+                }
             }
-            default -> {
-            }
+
+            saldoCaixa.setSaldo(novoSaldo);
+            caixaRepository.save(saldoCaixa);
+            transactionManager.commit(transaction);
+        } catch (Exception e) {
+            transactionManager.rollback(transaction);
+            throw new BadRequestException("Erro na saida no caixa" + e);
         }
     }
 
