@@ -32,7 +32,8 @@ public class TransacoesService {
 
     @Transactional
     public void gravarTransacao(TransacoesEntity transacoesEntity) {
-        var saldoCaixa = caixaRepository.findById(1L).get();
+        var saldoCaixa = caixaRepository.findById(1L).orElseThrow(() -> new ResouceNotFoundException(1L));
+
         validaSaidaSaldo(transacoesEntity, saldoCaixa);
         var transaction = transactionManager.getTransaction(new DefaultTransactionDefinition());
 
@@ -65,7 +66,6 @@ public class TransacoesService {
 
                     var newSaldoEstoque = saldoCaixa.getSaldoEstoque().subtract(transacoesEntity.getValorTransacao());
                     saldoCaixa.setSaldoEstoque(newSaldoEstoque);
-                    caixaRepository.save(saldoCaixa);
                 }
                 case "R" -> {
                     var newSaldoEstoque = saldoCaixa.getSaldoEstoque().add(transacoesEntity.getValorTransacao());
