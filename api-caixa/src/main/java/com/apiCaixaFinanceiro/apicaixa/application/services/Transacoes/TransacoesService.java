@@ -33,11 +33,10 @@ public class TransacoesService {
     @Transactional
     public void gravarTransacao(TransacoesEntity transacoesEntity) {
         var saldoCaixa = caixaRepository.findById(1L).orElseThrow(() -> new ResouceNotFoundException(1L));
-
-        validaSaidaSaldo(transacoesEntity, saldoCaixa);
         var transaction = transactionManager.getTransaction(new DefaultTransactionDefinition());
 
         try {
+            validaSaidaSaldo(transacoesEntity, saldoCaixa);
             transacoesRepository.save(transacoesEntity);
             transactionManager.commit(transaction);
         } catch (Exception e) {
@@ -47,50 +46,43 @@ public class TransacoesService {
     }
 
     private void validaSaidaSaldo(TransacoesEntity transacoesEntity, CaixaEntity saldoCaixa) {
-        var transaction = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        try {
-            BigDecimal novoSaldo = BigDecimal.ZERO;
+        BigDecimal novoSaldo = BigDecimal.ZERO;
 
-            switch (transacoesEntity.getTipoTransacao()) {
-                case "S" -> {
-                    if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
-                        throw new BadRequestException("Você não possui saldo para essa transação");
-                    }
-                    novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+        switch (transacoesEntity.getTipoTransacao()) {
+            case "S" -> {
+                if (saldoCaixa.getSaldo().compareTo(transacoesEntity.getValorTransacao()) < 0) {
+                    throw new BadRequestException("Você não possui saldo para essa transação");
                 }
-                case "E" -> {
-                    novoSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
-                }
-                case "T" -> {
-                    novoSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
-
-                    var newSaldoEstoque = saldoCaixa.getSaldoEstoque().subtract(transacoesEntity.getValorTransacao());
-                    saldoCaixa.setSaldoEstoque(newSaldoEstoque);
-                }
-                case "R" -> {
-                    var newSaldoEstoque = saldoCaixa.getSaldoEstoque().add(transacoesEntity.getValorTransacao());
-                    saldoCaixa.setSaldoEstoque(newSaldoEstoque);
-
-                    novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
-                }
-                case "X" -> {
-                    if (transacoesEntity.getValorTransacao().compareTo(saldoCaixa.getSaldo()) > 0) {
-                        throw new BadRequestException("O Valor informado e maior que o saldo disponivel.");
-                    }
-
-                    novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
-                }
-                default -> {
-                }
+                novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
             }
+            case "E" -> {
+                novoSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
+            }
+            case "T" -> {
+                novoSaldo = saldoCaixa.getSaldo().add(transacoesEntity.getValorTransacao());
 
-            saldoCaixa.setSaldo(novoSaldo);
-            caixaRepository.save(saldoCaixa);
-            transactionManager.commit(transaction);
-        } catch (Exception e) {
-            transactionManager.rollback(transaction);
-            throw new BadRequestException("Erro na saida no caixa" + e);
+                var newSaldoEstoque = saldoCaixa.getSaldoEstoque().subtract(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldoEstoque(newSaldoEstoque);
+            }
+            case "R" -> {
+                var newSaldoEstoque = saldoCaixa.getSaldoEstoque().add(transacoesEntity.getValorTransacao());
+                saldoCaixa.setSaldoEstoque(newSaldoEstoque);
+
+                novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+            }
+            case "X" -> {
+                if (transacoesEntity.getValorTransacao().compareTo(saldoCaixa.getSaldo()) > 0) {
+                    throw new BadRequestException("O Valor informado e maior que o saldo disponivel.");
+                }
+
+                novoSaldo = saldoCaixa.getSaldo().subtract(transacoesEntity.getValorTransacao());
+            }
+            default -> {
+            }
         }
+
+        saldoCaixa.setSaldo(novoSaldo);
+        caixaRepository.save(saldoCaixa);
     }
 
     public Page<TransacoesEntity> retornaTransacao(Pageable pageable, LocalDate data) {
